@@ -2,7 +2,11 @@ package com.mycompany.image.thresholding;
 
 import java.awt.image.BufferedImage;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -23,7 +27,18 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         nu.pattern.OpenCV.loadShared();
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        
+        FileFilter jpeg = new FileNameExtensionFilter("JPEG Images", "jpg", "jpeg");
+        FileFilter png = new FileNameExtensionFilter("PNG Images", "png");
+        FileFilter bmp = new FileNameExtensionFilter("BMP Images", "bmp", "dib");
+        FileFilter tiff = new FileNameExtensionFilter("TIFF Images", "tiff", "tif");
         this.fc = new JFileChooser();
+        
+        this.fc.addChoosableFileFilter(jpeg);
+        this.fc.addChoosableFileFilter(png);
+        this.fc.addChoosableFileFilter(bmp);
+        this.fc.addChoosableFileFilter(tiff);
+        
         initComponents();
     }
 
@@ -45,6 +60,7 @@ public class MainFrame extends javax.swing.JFrame {
         exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         thresholdingMenuItem = new javax.swing.JMenuItem();
+        showOriginalMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
 
@@ -75,11 +91,22 @@ public class MainFrame extends javax.swing.JFrame {
 
         saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         saveMenuItem.setText("Guardar");
+        saveMenuItem.setEnabled(false);
+        saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(saveMenuItem);
         fileMenu.add(jSeparator1);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         exitMenuItem.setText("Salir");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(exitMenuItem);
 
         menubar.add(fileMenu);
@@ -88,6 +115,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         thresholdingMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         thresholdingMenuItem.setText("Umbralizar");
+        thresholdingMenuItem.setEnabled(false);
         thresholdingMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 thresholdingMenuItemActionPerformed(evt);
@@ -95,12 +123,26 @@ public class MainFrame extends javax.swing.JFrame {
         });
         editMenu.add(thresholdingMenuItem);
 
+        showOriginalMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        showOriginalMenuItem.setText("Ver original");
+        showOriginalMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showOriginalMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(showOriginalMenuItem);
+
         menubar.add(editMenu);
 
         helpMenu.setText("Ayuda");
 
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         aboutMenuItem.setText("Acera de");
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenuItemActionPerformed(evt);
+            }
+        });
         helpMenu.add(aboutMenuItem);
 
         menubar.add(helpMenu);
@@ -133,20 +175,60 @@ public class MainFrame extends javax.swing.JFrame {
         if( result == JFileChooser.APPROVE_OPTION ){
             this.originalImage = Imgcodecs.imread(
                     fc.getSelectedFile().getAbsolutePath());
+            this.currentImage = originalImage;
             this.lienzo.setImage((BufferedImage) HighGui.toBufferedImage(originalImage));
+            this.thresholdingMenuItem.setEnabled(true);
+            this.saveMenuItem.setEnabled(false);
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
 
     private void thresholdingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thresholdingMenuItemActionPerformed
-        String res = JOptionPane.showInputDialog(this, "Introduce el valor umbral");
+        String res = JOptionPane.showInputDialog(this, 
+                                                 "Introduce el valor Umbral", 
+                                                 "Establece el umbral", 
+                                                 JOptionPane.PLAIN_MESSAGE);
+        
+        if( res == null ) return;
+        
         try{
             int umbral = Integer.parseInt(res);
             this.currentImage = umbralizar(originalImage, umbral);
             this.lienzo.setImage((BufferedImage) HighGui.toBufferedImage(currentImage));
+            this.saveMenuItem.setEnabled(true);
         } catch(NumberFormatException e){
-            JOptionPane.showConfirmDialog(this, "introduce un número entero entre 0 y 255", "umbral no válido", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                                     "Introduce un número entero entre 0 y 255", 
+                                     "Umbral no válido", 
+                                     JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_thresholdingMenuItemActionPerformed
+
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+        int res = JOptionPane.showConfirmDialog(this, "¿Desea salir?", "Salir", 
+                                                JOptionPane.YES_NO_OPTION);
+        
+        if( res == JOptionPane.YES_OPTION ){
+            System.exit(0);
+        }
+    }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
+        int result = fc.showSaveDialog(this);
+        
+        if( result == JFileChooser.APPROVE_OPTION ){
+            Imgcodecs.imwrite(fc.getSelectedFile().getAbsolutePath(), currentImage);
+        }
+
+    }//GEN-LAST:event_saveMenuItemActionPerformed
+
+    private void showOriginalMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showOriginalMenuItemActionPerformed
+        this.currentImage = this.originalImage;
+        this.lienzo.setImage((BufferedImage) HighGui.toBufferedImage(currentImage));
+    }//GEN-LAST:event_showOriginalMenuItemActionPerformed
+
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+        JOptionPane.showMessageDialog(this, "Ayuda");
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -190,6 +272,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar menubar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
+    private javax.swing.JMenuItem showOriginalMenuItem;
     private javax.swing.JMenuItem thresholdingMenuItem;
     // End of variables declaration//GEN-END:variables
     
