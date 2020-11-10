@@ -1,6 +1,9 @@
 package com.mycompany.image.thresholding;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -173,10 +176,28 @@ public class MainFrame extends javax.swing.JFrame {
         int result = fc.showOpenDialog(this);
         
         if( result == JFileChooser.APPROVE_OPTION ){
+            File file = fc.getSelectedFile();
+            String path = "";
+            try{
+                path = Files.probeContentType(file.toPath());
+            }catch(IOException e){}
+            System.out.println(path);
+            if (!path.startsWith("image/")){
+                JOptionPane.showMessageDialog(this, 
+                                     "el archivo seleccionado no es una imagen", 
+                                     "Archivo no válido", 
+                                     JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
             this.originalImage = Imgcodecs.imread(
                     fc.getSelectedFile().getAbsolutePath());
+                        System.out.println("dos");
+
             this.currentImage = originalImage;
             this.lienzo.setImage((BufferedImage) HighGui.toBufferedImage(originalImage));
+                        System.out.println("tres");
+
             this.thresholdingMenuItem.setEnabled(true);
             this.saveMenuItem.setEnabled(false);
         }
