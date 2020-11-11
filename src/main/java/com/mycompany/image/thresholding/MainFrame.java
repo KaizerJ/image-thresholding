@@ -5,9 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.opencv.core.Core;
@@ -78,9 +77,11 @@ public class MainFrame extends javax.swing.JFrame {
             .addGap(0, 768, Short.MAX_VALUE)
         );
 
+        fileMenu.setMnemonic('f');
         fileMenu.setText("Ficheros");
 
         openMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        openMenuItem.setMnemonic('a');
         openMenuItem.setText("Abrir");
         openMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,6 +91,7 @@ public class MainFrame extends javax.swing.JFrame {
         fileMenu.add(openMenuItem);
 
         saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        saveMenuItem.setMnemonic('g');
         saveMenuItem.setText("Guardar");
         saveMenuItem.setEnabled(false);
         saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -101,6 +103,7 @@ public class MainFrame extends javax.swing.JFrame {
         fileMenu.add(jSeparator1);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        exitMenuItem.setMnemonic('s');
         exitMenuItem.setText("Salir");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,9 +114,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         menubar.add(fileMenu);
 
+        editMenu.setMnemonic('e');
         editMenu.setText("Editar");
 
         thresholdingMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        thresholdingMenuItem.setMnemonic('u');
         thresholdingMenuItem.setText("Umbralizar");
         thresholdingMenuItem.setEnabled(false);
         thresholdingMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -124,6 +129,7 @@ public class MainFrame extends javax.swing.JFrame {
         editMenu.add(thresholdingMenuItem);
 
         showOriginalMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        showOriginalMenuItem.setMnemonic('v');
         showOriginalMenuItem.setText("Ver original");
         showOriginalMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,9 +140,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         menubar.add(editMenu);
 
+        helpMenu.setMnemonic('a');
         helpMenu.setText("Ayuda");
 
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("Acera de");
         aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -247,7 +255,22 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_showOriginalMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-        JOptionPane.showMessageDialog(this, "Ayuda");
+        JTextArea help = new JTextArea();
+        help.setOpaque(false);
+        help.setFont(this.getFont());
+        help.setEditable(false);
+        
+        help.append("Esta aplicación realiza un proceso de umbralizado de una imagen.\n");
+        help.append("Versión: 0.0.1\n");
+        help.append("Autores: Samuel Trujillo y Jonay Suárez\n\n");
+        help.append("ACCIÓN \t ATAJO\n\n");
+        help.append("Abrir \t CTRL + O\n");
+        help.append("Guardar \t CTRL + S\n");
+        help.append("Salir \t CTRL + Q\n");
+        help.append("Umbralizar \t CTRL + U\n");
+        help.append("Ver Original \t CTRL + R\n");
+        help.append("Acerca de \t CTRL + H");
+        JOptionPane.showMessageDialog(this, help, "Ayuda", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     /**
