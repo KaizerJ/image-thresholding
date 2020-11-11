@@ -19,7 +19,7 @@ import org.opencv.imgproc.Imgproc;
 
 public class MainFrame extends javax.swing.JFrame {
 
-    private final JFileChooser fc;
+    private JFileChooser fc;
     private Mat currentImage;
     private Mat originalImage;
 
@@ -30,13 +30,7 @@ public class MainFrame extends javax.swing.JFrame {
         nu.pattern.OpenCV.loadShared();
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
-        FileFilter imgs = new FileNameExtensionFilter(
-                "Imagénes (JPEG, PNG, BMP y TIFF)", "jpg", "jpeg", "png", "bmp",
-                "dib", "tiff", "tif");
-        this.fc = new JFileChooser();
-        
-        this.fc.addChoosableFileFilter(imgs);
-        
+        initFileChooser();
         initComponents();
     }
 
@@ -324,5 +318,15 @@ public class MainFrame extends javax.swing.JFrame {
         Imgproc.threshold(imagenGris, imagenUmbralizada, umbral, 255, Imgproc.THRESH_BINARY);
         // se devuelve la imagen umbralizada
         return imagenUmbralizada;
+    }
+
+    private void initFileChooser() {
+        FileFilter imgs = new FileNameExtensionFilter(
+                "Imagénes (JPEG, PNG, BMP y TIFF)", "jpg", "jpeg", "png", "bmp",
+                "dib", "tiff", "tif");
+        
+        this.fc = new JFileChooser();
+        
+        this.fc.addChoosableFileFilter(imgs);
     }
 }
