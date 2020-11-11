@@ -64,7 +64,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Umbralizar imagen");
-        setResizable(false);
+        setSize(new java.awt.Dimension(0, 0));
 
         javax.swing.GroupLayout lienzoLayout = new javax.swing.GroupLayout(lienzo);
         lienzo.setLayout(lienzoLayout);
@@ -77,11 +77,9 @@ public class MainFrame extends javax.swing.JFrame {
             .addGap(0, 768, Short.MAX_VALUE)
         );
 
-        fileMenu.setMnemonic('f');
         fileMenu.setText("Ficheros");
 
         openMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        openMenuItem.setMnemonic('a');
         openMenuItem.setText("Abrir");
         openMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,7 +89,6 @@ public class MainFrame extends javax.swing.JFrame {
         fileMenu.add(openMenuItem);
 
         saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        saveMenuItem.setMnemonic('g');
         saveMenuItem.setText("Guardar");
         saveMenuItem.setEnabled(false);
         saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -103,7 +100,6 @@ public class MainFrame extends javax.swing.JFrame {
         fileMenu.add(jSeparator1);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        exitMenuItem.setMnemonic('s');
         exitMenuItem.setText("Salir");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -114,11 +110,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         menubar.add(fileMenu);
 
-        editMenu.setMnemonic('e');
         editMenu.setText("Editar");
 
         thresholdingMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        thresholdingMenuItem.setMnemonic('u');
         thresholdingMenuItem.setText("Umbralizar");
         thresholdingMenuItem.setEnabled(false);
         thresholdingMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -129,7 +123,6 @@ public class MainFrame extends javax.swing.JFrame {
         editMenu.add(thresholdingMenuItem);
 
         showOriginalMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        showOriginalMenuItem.setMnemonic('v');
         showOriginalMenuItem.setText("Ver original");
         showOriginalMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,11 +133,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         menubar.add(editMenu);
 
-        helpMenu.setMnemonic('a');
         helpMenu.setText("Ayuda");
 
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("Acera de");
         aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,15 +154,15 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lienzo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lienzo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lienzo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lienzo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -197,6 +188,7 @@ public class MainFrame extends javax.swing.JFrame {
 
                 this.currentImage = originalImage;
                 this.lienzo.setImage((BufferedImage) HighGui.toBufferedImage(originalImage));
+                this.pack();
 
                 this.thresholdingMenuItem.setEnabled(true);
                 this.saveMenuItem.setEnabled(false);
@@ -262,7 +254,7 @@ public class MainFrame extends javax.swing.JFrame {
         
         help.append("Esta aplicación realiza un proceso de umbralizado de una imagen.\n");
         help.append("Versión: 0.0.1\n");
-        help.append("Autores: Samuel Trujillo y Jonay Suárez\n\n");
+        help.append("Autores: Samuel Trujillo Santana y Jonay Suárez Ramírez\n\n");
         help.append("ACCIÓN \t ATAJO\n\n");
         help.append("Abrir \t CTRL + O\n");
         help.append("Guardar \t CTRL + S\n");
