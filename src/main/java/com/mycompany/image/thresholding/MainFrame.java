@@ -31,16 +31,12 @@ public class MainFrame extends javax.swing.JFrame {
         nu.pattern.OpenCV.loadShared();
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
-        FileFilter jpeg = new FileNameExtensionFilter("JPEG Images", "jpg", "jpeg");
-        FileFilter png = new FileNameExtensionFilter("PNG Images", "png");
-        FileFilter bmp = new FileNameExtensionFilter("BMP Images", "bmp", "dib");
-        FileFilter tiff = new FileNameExtensionFilter("TIFF Images", "tiff", "tif");
+        FileFilter imgs = new FileNameExtensionFilter(
+                "Imagénes (JPEG, PNG, BMP y TIFF)", "jpg", "jpeg", "png", "bmp",
+                "dib", "tiff", "tif");
         this.fc = new JFileChooser();
         
-        this.fc.addChoosableFileFilter(jpeg);
-        this.fc.addChoosableFileFilter(png);
-        this.fc.addChoosableFileFilter(bmp);
-        this.fc.addChoosableFileFilter(tiff);
+        this.fc.addChoosableFileFilter(imgs);
         
         initComponents();
     }
@@ -69,6 +65,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Umbralizar imagen");
+        setResizable(false);
 
         javax.swing.GroupLayout lienzoLayout = new javax.swing.GroupLayout(lienzo);
         lienzo.setLayout(lienzoLayout);
@@ -177,29 +174,31 @@ public class MainFrame extends javax.swing.JFrame {
         
         if( result == JFileChooser.APPROVE_OPTION ){
             File file = fc.getSelectedFile();
-            String path = "";
             try{
-                path = Files.probeContentType(file.toPath());
-            }catch(IOException e){}
-            System.out.println(path);
-            if (!path.startsWith("image/")){
+                String path = Files.probeContentType(file.toPath());
+                if (path == null || !path.startsWith("image/")){
+                    JOptionPane.showMessageDialog(this, 
+                                         "El archivo seleccionado no es una imagen válida", 
+                                         "Archivo no válido", 
+                                         JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                this.originalImage = Imgcodecs.imread(
+                        fc.getSelectedFile().getAbsolutePath());
+
+                this.currentImage = originalImage;
+                this.lienzo.setImage((BufferedImage) HighGui.toBufferedImage(originalImage));
+
+                this.thresholdingMenuItem.setEnabled(true);
+                this.saveMenuItem.setEnabled(false);
+            }catch(IOException e){
                 JOptionPane.showMessageDialog(this, 
-                                     "el archivo seleccionado no es una imagen", 
-                                     "Archivo no válido", 
-                                     JOptionPane.ERROR_MESSAGE);
-                return;
+                                         "Se produjo un error al intentar abrir el fichero", 
+                                         "Error de lectura del fichero", 
+                                         JOptionPane.ERROR_MESSAGE);
             }
             
-            this.originalImage = Imgcodecs.imread(
-                    fc.getSelectedFile().getAbsolutePath());
-                        System.out.println("dos");
-
-            this.currentImage = originalImage;
-            this.lienzo.setImage((BufferedImage) HighGui.toBufferedImage(originalImage));
-                        System.out.println("tres");
-
-            this.thresholdingMenuItem.setEnabled(true);
-            this.saveMenuItem.setEnabled(false);
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
 
