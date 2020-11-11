@@ -14,8 +14,7 @@ public class Lienzo extends JPanel{
 
 
     public Lienzo() {
-        this.image = null;//new BufferedImage(1024, 768, BufferedImage.TYPE_INT_RGB);
-        //this.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
+        this.image = null;
     }
     
     @Override
@@ -26,8 +25,8 @@ public class Lienzo extends JPanel{
         } else {
             g.setColor(Color.GRAY);
             g.setFont(new Font( "SansSerif", Font.PLAIN, 20 ));
-            g.drawString("Abre una imagen en Fichero > Abrir", 
-                    this.getWidth()/2 - 150, this.getHeight()/2);
+            g.drawString("Abre una imagen en Ficheros > Abrir", 
+                    this.getWidth()/2 - 200, this.getHeight()/2);
         }
     }
     
